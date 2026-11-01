@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101323">
+<title>Coin Clicker — улучшенная версия</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1020;--panel:#171c32;--panel2:#202744;--text:#f5f6ff;--muted:#9da8c8;--accent:#927cff;--mint:#58e0bd;--gold:#ffd166;--line:#ffffff14;--red:#ff8298}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(ellipse at 12% 0%,#5945b52b,transparent 34%),radial-gradient(ellipse at 95% 90%,#24c5a51c,transparent 32%),var(--bg)}
+button{font:inherit}.wrap{width:min(1120px,calc(100% - 30px));margin:auto;padding:25px 0 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:900;letter-spacing:.5px}.logo{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:linear-gradient(135deg,var(--accent),#55c9e8);box-shadow:0 8px 25px #7767ff55}
+.actions{display:flex;gap:8px;align-items:center}.status{font-size:11px;color:var(--mint)}.ghost{border:1px solid var(--line);background:#ffffff08;color:var(--muted);padding:9px 12px;border-radius:11px;cursor:pointer}.ghost:hover{border-color:#927cff88;color:white}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat,.panel{background:#171c32eF;border:1px solid var(--line);border-radius:19px;box-shadow:0 14px 40px #0003;backdrop-filter:blur(12px)}.stat{padding:15px 17px}.stat-label{font-size:12px;color:var(--muted);margin-bottom:7px}.stat-value{font-size:clamp(19px,3vw,27px);font-weight:900;letter-spacing:-.7px}.stat-value small{font-size:12px;color:var(--gold)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}.click-panel{min-height:495px;padding:25px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:2px;font-weight:800;color:var(--muted)}.big-balance{font-size:clamp(39px,6vw,59px);font-weight:950;letter-spacing:-2px;margin:10px 0 0}.caption{color:var(--muted);font-size:13px}.coin{width:205px;height:205px;margin:27px 0 19px;border:0;border-radius:50%;cursor:pointer;position:relative;user-select:none;color:#754700;font-size:88px;background:radial-gradient(circle at 34% 25%,#fff4b9 0 7%,#ffdc76 27%,#f4ad32 67%,#bd7115 100%);box-shadow:0 12px 0 #8e5513,0 23px 45px #ffb52c35,inset 0 5px 12px #fff9c7;transition:transform .09s,filter .15s;touch-action:manipulation}.coin:before{content:"";position:absolute;inset:13px;border:3px solid #fff5bd77;border-radius:50%}.coin:hover{filter:brightness(1.07);transform:translateY(-2px)}.coin:active{transform:translateY(7px) scale(.97);box-shadow:0 5px 0 #8e5513,0 12px 25px #ffb52c28}.hint{font-size:12px;color:var(--muted);text-align:center}.combo{height:20px;margin-top:8px;color:var(--mint);font-size:12px;font-weight:800}.float{position:absolute;pointer-events:none;z-index:4;font-weight:900;color:var(--gold);font-size:21px;text-shadow:0 2px 12px #ffb52d77;animation:rise .8s ease-out forwards}@keyframes rise{to{opacity:0;transform:translateY(-75px) scale(1.25)}}
+.shop{padding:20px}.shop-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}h2{margin:0;font-size:18px}.sub{color:var(--muted);font-size:11px;margin-top:4px}.buy-modes{display:flex;gap:5px}.mode{border:1px solid var(--line);background:#ffffff08;color:var(--muted);border-radius:8px;padding:7px 9px;font-size:11px;cursor:pointer}.mode.active{background:#927cff2b;border-color:#927cff99;color:#fff}
+.upgrades{display:grid;gap:9px}.upgrade{display:grid;grid-template-columns:43px 1fr auto;gap:10px;align-items:center;padding:11px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;transition:.18s}.upgrade:hover{border-color:#927cff77;transform:translateY(-1px)}.uicon{width:42px;height:42px;border-radius:12px;background:#927cff20;display:grid;place-items:center;font-size:21px}.uname{font-size:13px;font-weight:800}.udesc,.ulevel{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.35}.ulevel{color:#c9c1ff}.buy{min-width:91px;border:0;border-radius:10px;padding:9px 8px;background:linear-gradient(135deg,#927cff,#6757e8);color:white;font-size:11px;font-weight:850;cursor:pointer}.buy span{display:block;font-size:10px;color:#e9e5ff;margin-top:3px}.buy:disabled{opacity:.35;cursor:not-allowed}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.mini{padding:18px}.mini h3{font-size:14px;margin:0 0 12px}.achievement{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:11px}.achievement span:last-child{color:var(--muted)}.achievement.done span:first-child{color:var(--mint)}.progress{height:7px;background:#ffffff12;border-radius:10px;overflow:hidden;margin-top:9px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--mint));width:0%;transition:width .2s}.prestige-copy{font-size:11px;color:var(--muted);line-height:1.5}.prestige-btn{margin-top:10px;width:100%;border:0;border-radius:10px;padding:10px;background:linear-gradient(135deg,#f3b94f,#dc7b32);color:#291700;font-weight:900;cursor:pointer}.prestige-btn:disabled{opacity:.35;cursor:not-allowed}.note{text-align:center;color:#77809f;font-size:10px;margin-top:17px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#242b47;border:1px solid #ffffff22;border-radius:12px;padding:11px 16px;font-size:12px;box-shadow:0 10px 30px #0006;transition:.25s;z-index:10}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){.wrap{width:min(100% - 20px,540px);padding-top:16px}.stats{grid-template-columns:repeat(2,1fr);gap:8px}.stat{padding:12px}.grid,.bottom{grid-template-columns:1fr;gap:11px}.click-panel{min-height:410px}.coin{width:180px;height:180px;font-size:76px}.shop{padding:15px 12px}.brand{font-size:16px}.status{display:none}}
+@media(max-width:370px){.upgrade{grid-template-columns:37px 1fr auto;gap:7px;padding:9px}.uicon{width:36px;height:36px}.buy{min-width:75px;padding:8px 5px}.shop-head{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+  <div class="brand"><div class="logo">🪙</div><span>COIN CLICKER</span></div>
+  <div class="actions"><span class="status" id="saveStatus">● Автосохранение</span><button class="ghost" id="soundButton" type="button">🔊 Звук: выкл.</button><button class="ghost" id="resetButton" type="button">Сброс</button></div>
+</header>
+<section class="stats" aria-label="Статистика">
+  <div class="stat"><div class="stat-label">Баланс</div><div class="stat-value" id="balance">0 <small>🪙</small></div></div>
+  <div class="stat"><div class="stat-label">За клик</div><div class="stat-value" id="perClick">1 <small>🪙</small></div></div>
+  <div class="stat"><div class="stat-label">В секунду</div><div class="stat-value" id="perSecond">0 <small>🪙</small></div></div>
+  <div class="stat"><div class="stat-label">Всего заработано</div><div class="stat-value" id="lifetime">0 <small>🪙</small></div></div>
+</section>
+<section class="grid">
+  <div class="panel click-panel" id="clickPanel">
+    <div class="eyebrow">Твой капитал</div><div class="big-balance" id="bigBalance">0</div><div class="caption">монет на счету</div>
+    <button class="coin" id="coinButton" type="button" aria-label="Получить монеты">🪙</button>
+    <div class="hint">Нажимай на монету, чтобы заработать</div><div class="combo" id="combo"></div>
+  </div>
+  <div class="panel shop">
+    <div class="shop-head"><div><h2>Магазин улучшений</h2><div class="sub">Покупай улучшения и автоматизируй доход</div></div>
+      <div class="buy-modes"><button class="mode active" data-mode="1">x1</button><button class="mode" data-mode="10">x10</button><button class="mode" data-mode="max">MAX</button></div>
+    </div>
+    <div class="upgrades" id="upgradeList"></div>
+  </div>
+</section>
+<section class="bottom">
+  <div class="panel mini"><h3>🏆 Достижения</h3><div id="achievements"></div></div>
+  <div class="panel mini"><h3>✨ Перерождение</h3><div class="prestige-copy" id="prestigeInfo">Накопи 100 000 монет за всё время, чтобы получить постоянный бонус к доходу.</div><button class="prestige-btn" id="prestigeButton" disabled>Переродиться</button></div>
+</section>
+<div class="note">Прогресс сохраняется автоматически в этом браузере · Оффлайн-доход начисляется максимум за 8 часов</div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const SAVE_KEY="coinClickerSave_v2";
+const upgrades=[
+{id:"finger",name:"Сильный палец",icon:"👆",description:"+1 к монетам за клик",base:15,growth:1.55,type:"click",power:1},
+{id:"glove",name:"Золотая перчатка",icon:"🧤",description:"+5 к монетам за клик",base:120,growth:1.7,type:"click",power:5},
+{id:"robot",name:"Клик-бот",icon:"🤖",description:"+25 к монетам за клик",base:1500,growth:1.8,type:"click",power:25},
+{id:"worker",name:"Работник",icon:"🧑‍💼",description:"+1 монета каждую секунду",base:50,growth:1.55,type:"auto",power:1},
+{id:"farm",name:"Монетная ферма",icon:"🏭",description:"+8 монет каждую секунду",base:350,growth:1.65,type:"auto",power:8},
+{id:"mine",name:"Золотая шахта",icon:"⛏️",description:"+40 монет каждую секунду",base:1800,growth:1.75,type:"auto",power:40},
+{id:"bank",name:"Криптобанк",icon:"🏦",description:"+250 монет каждую секунду",base:12000,growth:1.85,type:"auto",power:250}
+];
+const achievements=[
+{id:"first",name:"Первая монета",test:s=>s.lifetime>=1,goal:"Заработай 1 монету"},
+{id:"hundred",name:"Копилка",test:s=>s.lifetime>=100,goal:"Заработай 100 монет"},
+{id:"thousand",name:"Тысячник",test:s=>s.lifetime>=1000,goal:"Заработай 1 000 монет"},
+{id:"tenk",name:"Капиталист",test:s=>s.lifetime>=10000,goal:"Заработай 10 000 монет"},
+{id:"million",name:"Миллионер",test:s=>s.lifetime>=1000000,goal:"Заработай 1 000 000 монет"}
+];
+const fresh=()=>({coins:0,lifetime:0,levels:{finger:0,glove:0,robot:0,worker:0,farm:0,mine:0,bank:0},prestiges:0,achievements:[],lastSaved:Date.now(),sound:false});
+function load(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(SAVE_KEY));
+  if(!raw||typeof raw!=="object")return fresh();
+  const s={...fresh(),...raw,levels:{...fresh().levels,...(raw.levels||{})},achievements:Array.isArray(raw.achievements)?raw.achievements:[]};
+  for(const k of ["coins","lifetime","prestiges"])if(!Number.isFinite(s[k])||s[k]<0)s[k]=0;
+  const elapsed=Math.min(8*3600,Math.max(0,(Date.now()-(Number(s.lastSaved)||Date.now()))/1000));
+  const rate=calcIncome(s);const bonus=rate*elapsed;
+  s.coins+=bonus;s.lifetime+=bonus;s.lastSaved=Date.now();
+  if(bonus>1)window.addEventListener("load",()=>toast(`Пока тебя не было: +${fmt(bonus)} 🪙`));
+  return s;
+ }catch{return fresh()}
+}
+let state=load(),buyMode="1",comboCount=0,lastClick=0,toastTimer;
+const $=id=>document.getElementById(id);
+const fmt=n=>{if(!Number.isFinite(n))return"∞";if(n>=1e15)return(n/1e15).toFixed(2)+"Qa";if(n>=1e12)return(n/1e12).toFixed(2)+"T";if(n>=1e9)return(n/1e9).toFixed(2)+"B";if(n>=1e6)return(n/1e6).toFixed(2)+"M";if(n>=1e3)return(n/1e3).toFixed(1)+"K";return Math.floor(n).toLocaleString("ru-RU")};
+const clickPower=s=>1+upgrades.filter(x=>x.type==="click").reduce((a,x)=>a+x.power*(s.levels[x.id]||0),0);
+function calcIncome(s){return upgrades.filter(x=>x.type==="auto").reduce((a,x)=>a+x.power*(s.levels[x.id]||0),0)*(1+(s.prestiges||0)*.1)}
+function cost(item,level){return Math.floor(item.base*Math.pow(item.growth,level))}
+function totalCost(item,count,level){let sum=0;for(let i=0;i<count;i++)sum+=cost(item,level+i);return sum}
+function maxAffordable(item){let n=0,coins=state.coins,level=state.levels[item.id];while(n<10000){const c=cost(item,level+n);if(!Number.isFinite(c)||coins<c)break;coins-=c;n++}return n}
+function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2200)}
+function save(){try{state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state));$("saveStatus").textContent="● Сохранено"}catch{$("saveStatus").textContent="● Ошибка сохранения"}}
+function checkAchievements(){for(const a of achievements){if(!state.achievements.includes(a.id)&&a.test(state)){state.achievements.push(a.id);toast("Достижение: "+a.name+" 🏆")}}}
+function render(){
+ const income=calcIncome(state),perClick=clickPower(state);
+ $("balance").innerHTML=`${fmt(state.coins)} <small>🪙</small>`;$("bigBalance").textContent=fmt(state.coins);
+ $("perClick").innerHTML=`${fmt(perClick)} <small>🪙</small>`;$("perSecond").innerHTML=`${fmt(income)} <small>🪙</small>`;
+ $("lifetime").innerHTML=`${fmt(state.lifetime)} <small>🪙</small>`;
+ $("upgradeList").innerHTML=upgrades.map(item=>{
+  const lvl=state.levels[item.id],count=buyMode==="max"?maxAffordable(item):Number(buyMode);
+  const actual=Math.max(1,count),price=totalCost(item,actual,lvl),can=count>0&&state.coins>=price;
+  const label=buyMode==="max"?(count?`Купить x${count}`:"MAX"):`Купить x${actual}`;
+  return `<div class="upgrade"><div class="uicon">${item.icon}</div><div><div class="uname">${item.name}</div><div class="udesc">${item.description}</div><div class="ulevel">Уровень: ${lvl}</div></div><button class="buy" data-buy="${item.id}" ${can?"":"disabled"}>${label}<span>${fmt(price)} 🪙</span></button></div>`;
+ }).join("");
+ $("achievements").innerHTML=achievements.map(a=>{const done=state.achievements.includes(a.id);return `<div class="achievement ${done?"done":""}"><span>${done?"✓":"○"} ${a.name}</span><span>${done?"Получено":a.goal}</span></div>`}).join("");
+ const required=100000;
+ $("prestigeInfo").textContent=`Всего заработано: ${fmt(state.lifetime)} / ${fmt(required)} монет. Перерождение сбросит баланс и улучшения, но даст постоянный бонус +10% к автоматическому доходу за каждый уровень. Сейчас: +${state.prestiges*10}%.`;
+ $("prestigeButton").disabled=state.lifetime<required;
+ $("soundButton").textContent=state.sound?"🔊 Звук: вкл.":"🔊 Звук: выкл.";
+ document.querySelectorAll(".mode").forEach(b=>b.classList.toggle("active",b.dataset.mode===buyMode));
+}
+function playSound(){if(!state.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;const c=new C(),o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=660;g.gain.setValueAtTime(.045,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.08);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.08);o.onended=()=>c.close()}catch{}}
+function clickCoin(e){
+ const now=Date.now();comboCount=now-lastClick<700?comboCount+1:1;lastClick=now;
+ const critical=Math.random()<.05,amount=clickPower(state)*(critical?5:1);
+ state.coins+=amount;state.lifetime+=amount;checkAchievements();playSound();
+ $("combo").textContent=comboCount>=5?`🔥 Серия кликов: ${comboCount}`:"";
+ const panel=$("clickPanel"),r=panel.getBoundingClientRect(),x=e.clientX?e.clientX-r.left:r.width/2,y=e.clientY?e.clientY-r.top:r.height/2;
+ const pop=document.createElement("span");pop.className="float";pop.textContent=`+${fmt(amount)} 🪙${critical?" КРИТ!":""}`;
+ pop.style.left=Math.max(10,Math.min(r.width-150,x-25))+"px";pop.style.top=Math.max(15,y-10)+"px";panel.appendChild(pop);setTimeout(()=>pop.remove(),850);
+ render();
+}
+$("coinButton").addEventListener("click",clickCoin);
+$("upgradeList").addEventListener("click",e=>{
+ const btn=e.target.closest("[data-buy]");if(!btn)return;
+ const item=upgrades.find(x=>x.id===btn.dataset.buy);if(!item)return;
+ const count=buyMode==="max"?maxAffordable(item):Number(buyMode);
+ if(!count)return;const price=totalCost(item,count,state.levels[item.id]);if(state.coins<price)return;
+ state.coins-=price;state.levels[item.id]+=count;render();save();
+});
+document.querySelectorAll(".mode").forEach(b=>b.addEventListener("click",()=>{buyMode=b.dataset.mode;render()}));
+$("soundButton").addEventListener("click",()=>{state.sound=!state.sound;render();save()});
+$("resetButton").addEventListener("click",()=>{if(!confirm("Сбросить весь прогресс, включая перерождения? Это нельзя отменить."))return;state=fresh();save();render();toast("Прогресс сброшен")});
+$("prestigeButton").addEventListener("click",()=>{
+ if(state.lifetime<100000||!confirm("Переродиться? Баланс и улучшения обнулятся, бонус к авто-доходу увеличится на 10%."))return;
+ state.prestiges++;state.coins=0;state.levels=fresh().levels;state.lifetime=0;state.achievements=[];save();render();toast("Перерождение выполнено! Бонус усилен ✨");
+});
+let previous=Date.now();
+setInterval(()=>{const now=Date.now(),dt=Math.min(2,(now-previous)/1000);previous=now;const gain=calcIncome(state)*dt;if(gain>0){state.coins+=gain;state.lifetime+=gain;checkAchievements();render()}},100);
+setInterval(save,5000);window.addEventListener("beforeunload",save);document.addEventListener("visibilitychange",()=>{if(document.hidden)save()});
+render();save();
+</script>
+</body>
+</html>
